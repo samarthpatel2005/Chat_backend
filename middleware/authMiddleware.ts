@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { IUser } from '../models/User';
 
-interface AuthRequest extends Request {
-  user?: IUser;
+export interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    _id: string;
+  };
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -19,11 +21,12 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   try {
     const jwtSecret = process.env.JWT_SECRET || 'fallback_secret_key';
     const decoded = jwt.verify(token, jwtSecret) as { userId: string };
-    req.user = { _id: decoded.userId } as IUser;
+    req.user = { 
+      id: decoded.userId,
+      _id: decoded.userId 
+    };
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });
   }
 };
-
-export { AuthRequest };

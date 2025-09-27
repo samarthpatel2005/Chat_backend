@@ -6,6 +6,8 @@ import { Server } from 'socket.io';
 import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 import chatRoutes from './routes/chatRoutes';
+import chatManagementRoutes from './routes/chatManagementRoutes';
+import userRoutes from './routes/userRoutes';
 import { setupChatSocket } from './socket/chatSocket';
 
 // Load environment variables
@@ -36,6 +38,8 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/chats', chatManagementRoutes);
+app.use('/api/users', userRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
